@@ -1,5 +1,6 @@
 // Import the mount() method from the test utils
 // and the component you want to test
+import { shallowMount } from '@vue/test-utils'
 import { mount } from '@vue/test-utils'
 import Header from "../../src/components/Header.vue";
 import List from "../../src/components/List.vue";
@@ -53,5 +54,27 @@ describe('Header', () => {
         expect(wrapper.vm.open).toBe(false);
         wrapper.find('span').trigger('click');
         expect(wrapper.vm.open).toBe(true);
+    })
+ });
+
+
+describe('List', () => {
+    const wrapper = shallowMount(List,{
+        props: {
+            list:  {
+                type: Array,
+                default : () => [{"id":1,"title":"Laundry","done":false}, {"id":2,"title":"Shopping","done":false}, {"id":3,"title":"Homework","done":false}, {"id":4,"title":"Party!","done":false}, {"id":5,"title":"Foobar","done":true}, {"id":6,"title":"Foobar2","done":false}, {"id":7,"title":"Foobar3","done":false}, {"id":8,"title":"Foobar4","done":false}]
+        }}
+      })
+    // const wrapper = mount(List)
+
+    it('done changed to true', () => {
+        const items = wrapper.findAll('.list-item')
+        const first = items.at(0)
+        const last = items.at(7)
+
+        expect(first.html()).not.toContain('done');
+        first.find('span').trigger('click');
+        expect(last.html()).toContain('done');
     })
  });
